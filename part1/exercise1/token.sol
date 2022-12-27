@@ -37,7 +37,13 @@ contract Token is Pausable{
     mapping(address => uint) public balances;
 
     function transfer(address to, uint value) ifNotPaused public{
+        uint256 preBalanceSender = balances[msg.sender];
+        uint256 preBalanceReceiver = balances[to];
+
         balances[msg.sender] -= value;
         balances[to] += value;
+
+        require(balances[msg.sender] <= preBalanceSender);
+        require(balances[to] >= preBalanceReceiver);
     }
 }
