@@ -19,6 +19,23 @@ The video presentation for this part can be found on [YouTube](https://www.youtu
 
 Because Staker is a Hardhat project, before being able to fuzz it with Echidna, you have to install its dependencies.
 
-Make sure you have npm installed. 
+Make sure you have npm installed.
 
-Once you are in the Staker directory run `npm install`. 
+Once you are in the Staker directory run `npm install`.
+
+## Notes
+
+- Property based fuzz testing, property as "truthy" values.
+- How do we define expected behavior?
+- Function level vs system level - stateless and isolated vs needs deep understanding
+- abdkMath - signed bit, integer and fraction (1 - 63 - 64) num int128, denom - 2^64
+- doesn't make sense to test the basic operations but instead follow the alegrabic properties
+- assciative and inverse of add-sub
+- get creative to figure out what can break
+- use event emission to debug
+
+- pre-conditions are the barriers to entry
+- action - what you are testing
+- post-conditions - happy vs not happy paths - (try/catch)
+- optimizing fuzzer statement - break properties vs checking for overflow
+-

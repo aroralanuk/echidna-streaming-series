@@ -1,4 +1,4 @@
-pragma solidity 0.8.1;
+pragma solidity ^0.8.1;
 
 import "./ABDKMath64x64.sol";
 
@@ -134,7 +134,7 @@ contract EchidnaTemplate {
 
     /* ================================================================
        Integer representations maximum values.
-       These constants are used for testing edge cases or limits for 
+       These constants are used for testing edge cases or limits for
        possible values.
        ================================================================ */
     int128 private constant MIN_64x64 = -0x80000000000000000000000000000000;
@@ -152,13 +152,13 @@ contract EchidnaTemplate {
 
     // This function allows to compare a and b for equality, discarding
     // the last precision_bits bits.
-    // This implements an absolute value function in order to not use 
+    // This implements an absolute value function in order to not use
     // the implementation from the library under test.
     function equal_within_precision(int128 a, int128 b, uint256 precision_bits) private returns(bool) {
         int128 max = (a > b) ? a : b;
         int128 min = (a > b) ? b : a;
         int128 r = (max - min) >> precision_bits;
-        
+
         return (r == 0);
     }
 
@@ -166,7 +166,7 @@ contract EchidnaTemplate {
         uint256 max = (a > b) ? a : b;
         uint256 min = (a > b) ? b : a;
         uint256 r = (max - min) >> precision_bits;
-        
+
         return (r == 0);
     }
 
@@ -223,7 +223,7 @@ contract EchidnaTemplate {
         return (value & mask);
     }
 
-    // Returns true if the n most significant bits of a and b are almost equal 
+    // Returns true if the n most significant bits of a and b are almost equal
     // Uses functions from the library under test!
     function equal_most_significant_bits_within_precision(int128 a, int128 b, uint256 bits) private returns (bool) {
         uint256 a_bits = uint256(int256(toInt(log_2(a)) + 64));
@@ -250,41 +250,41 @@ contract EchidnaTemplate {
 
     // Test for associative property
     // (x + y) + z == x + (y + z)
-    function add_test_associative(int128 x, int128 y, int128 z) public {
-    }
+    // function add_test_associative(int128 x, int128 y, int128 z) public {
+    //     int128 x_y = add(x,y);
+    //     int128 xy_z = add(x_y,z);
 
+    //     int128 y_z = add(y,z);
+    //     int128 x_yz = add(x,y_z);
 
+    //     assert(xy_z == x_yz);
+    // }
 
+    // // Test (x + y) - y == x
+    // function add_sub_inverse_operations(int128 x, int128 y) public {
+    //     int128 x_y = add(x,y);
+    //     int128 new_x = sub(x_y,y);
+    //     emit Debug(x_y, new_x);
 
-
-
-
-
-
-
-
-
-    // Test (x + y) - y == x
-    function add_sub_inverse_operations(int128 x, int128 y) public {
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    //     assert(new_x == x);
+    // }
 
     // Test that division is not commutative
     // (x / y) != (y / x)
     function div_test_not_commutative(int128 x, int128 y) public {
+        // pre-condition
+        // require(abs(x) != abs(y));
+
+        // action
+        int128 x_y = div(x,y);
+        int128 y_x = div(y,x);
+
+        // post-condition
+        if (abs(x) == abs(y)) {
+            assert(x_y == y_x);
+        } else {
+            assert(x_y != y_x);
+        }
+
     }
 }
