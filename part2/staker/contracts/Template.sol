@@ -33,7 +33,7 @@ contract EchidnaTemplate {
     // setup
     constructor() {
         tokenToStake = new MockERC20("Token", "TOK");
-        tokenToStake.mint(address(this), type(uint256).max));
+        tokenToStake.mint(address(this), type(uint256).max);
         stakerContract = new Staker(address(tokenToStake));
     }
 

@@ -250,24 +250,24 @@ contract EchidnaTemplate {
 
     // Test for associative property
     // (x + y) + z == x + (y + z)
-    // function add_test_associative(int128 x, int128 y, int128 z) public {
-    //     int128 x_y = add(x,y);
-    //     int128 xy_z = add(x_y,z);
+    function add_test_associative(int128 x, int128 y, int128 z) public {
+        int128 x_y = add(x,y);
+        int128 xy_z = add(x_y,z);
 
-    //     int128 y_z = add(y,z);
-    //     int128 x_yz = add(x,y_z);
+        int128 y_z = add(y,z);
+        int128 x_yz = add(x,y_z);
 
-    //     assert(xy_z == x_yz);
-    // }
+        assert(xy_z == x_yz);
+    }
 
-    // // Test (x + y) - y == x
-    // function add_sub_inverse_operations(int128 x, int128 y) public {
-    //     int128 x_y = add(x,y);
-    //     int128 new_x = sub(x_y,y);
-    //     emit Debug(x_y, new_x);
+    // Test (x + y) - y == x
+    function add_sub_inverse_operations(int128 x, int128 y) public {
+        int128 x_y = add(x,y);
+        int128 new_x = sub(x_y,y);
+        emit Debug(x_y, new_x);
 
-    //     assert(new_x == x);
-    // }
+        assert(new_x == x);
+    }
 
     // Test that division is not commutative
     // (x / y) != (y / x)
@@ -286,5 +286,65 @@ contract EchidnaTemplate {
             assert(x_y != y_x);
         }
 
+    }
+
+    function mult_test_associative(int128 x, int128 y, int128 z) public {
+        int128 x_y = mul(x,y);
+        int128 xy_z = mul(x_y,z);
+
+        int128 y_z = mul(y,z);
+        int128 x_yz = mul(x,y_z);
+
+        assert(xy_z == x_yz);
+    }
+
+    function mult_test_distributive(int128 x, int128 y, int128 z) public {
+        int128 x_y = mul(x,y);
+        int128 x_z = mul(x,z);
+        int128 y_z = mul(y,z);
+
+        int128 x_y_z = add(x_y, x_z);
+        int128 x_yz = add(x_y, y_z);
+
+        assert(x_y_z == x_yz);
+    }
+
+    function mult_test_inverse(int128 x, int128 y) public {
+        require(x >= -0x80000);
+        require(x <= 0x7FFFFF);
+
+        require(y >= -0x80000);
+        require(y <= 0x80000);
+
+        int128 inv_x = inv(x);
+        int128 inv_y = inv(y);
+        emit Debug(inv_x, inv_y);
+
+        int128 inv_xy = inv(mul(x,y));
+        emit Debug(inv_xy, mul(inv_x, inv_y));
+
+        assert(mul(inv_x, inv_y) == inv_xy);
+    }
+
+    function sqrt_test(int128 x) public {
+        require(x >= 0);
+
+        int128 sqrt_x = sqrt(x);
+        emit Debug(sqrt_x, sqrt_x);
+        int128 sqrt_x_2 = mul(sqrt_x, sqrt_x);
+
+        // assert(sqrt_x_2 == x);
+
+        assert(sqrt_x_2 <= x);
+        assert(sqrt_x_2 + 2 >= x);
+    }
+
+    function log_test(int128 x, int128 y) public {
+        int128 log_x = log_2(x);
+        int128 log_y = log_2(y);
+
+        int128 log_xy = log_2(mul(x,y));
+
+        assert(log_xy == mul(log_x, log_y));
     }
 }
