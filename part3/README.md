@@ -16,7 +16,7 @@ The slides for this part can be found [here](./Echidna-Streaming-Session-Part-3.
 
 The video presentation for this part can be found on [YouTube](https://www.youtube.com/watch?v=n0RaKKVTGvA). For the updates to `testSwap()`, please look at the Youtube link in [part4](../part4/).
 
-## Prerequisites 
+## Prerequisites
 
 Because Uniswap V2 is a Hardhat project, before being able to fuzz it with Echidna, you have to install its dependencies.
 
@@ -28,3 +28,17 @@ cd part3
 npm install
 echidna-test . --contract EchidnaTest --config contracts/crytic/config.yaml
 ```
+
+## Notes
+
+- traditional fuzzing is just looking for crashes, for smart contracts we need to look for assertion fails
+- identify your invariant first in high level terms
+- pre-conditions - scope for input space
+- coverage mode enabled - what lines in the code did we hit
+- internal as inheritance and easy to setup but only viable to single entry point contracts
+- external as composition and middleman taking actions
+- Q. Does each subsequent Echidna run improve the future runs? Every time I run Echidna, it says that it loads some transactions from the corpus directory. What does it mean?
+- A. store the coverage in croppus and use prev to build bew transaction - reuse the sequences to hit the same issues first
+- mint function check balance vs reserves for calculating what the user deposited
+- mint in constructor - random values not allowed, cached for optimization purposes
+- mint a fixed amount in contract constructor
